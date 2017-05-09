@@ -9,6 +9,8 @@ import GoodsVue from './components/goods/goods';
 import RatingsVue from './components/ratings/ratings';
 import SellerVue from './components/seller/seller';
 
+import './common/stylus/index.styl';
+
 // 注册插件,不然在组件中的<router-link>和<router-view>会报错
 Vue.use(VueRouter);
 Vue.use(VueResource);
