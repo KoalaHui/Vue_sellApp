@@ -23,25 +23,27 @@
         <div class="inner inner-hook"></div>
       </div>
     </div>
-    <div class="shopcart-list" v-show="listShow" transition="fold">
-      <div class="list-header">
-        <h1 class="title">购物车</h1>
-        <span class="empty" @click="empty">清空</span>
-      </div>
-      <div class="list-content" ref="listContent">
-        <ul>
-          <li class="food" v-for="food in selectFoods">
-            <span class="name">{{food.name}}</span>
-            <div class="price">
-              <span>￥{{food.price*food.count}}</span>
-            </div>
-            <div class="cartcontrol-wrapper">
-              <cartcontrol :food="food"></cartcontrol>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </div>
+   <transition name="fold">
+     <div class="shopcart-list" v-show="listShow">
+       <div class="list-header">
+         <h1 class="title">购物车</h1>
+         <span class="empty" @click="empty">清空</span>
+       </div>
+       <div class="list-content" ref="listContent">
+         <ul>
+           <li class="food" v-for="food in selectFoods">
+             <span class="name">{{food.name}}</span>
+             <div class="price">
+               <span>￥{{food.price*food.count}}</span>
+             </div>
+             <div class="cartcontrol-wrapper">
+               <cartcontrol :food="food"></cartcontrol>
+             </div>
+           </li>
+         </ul>
+       </div>
+     </div>
+   </transition>
   </div>
   <div class="list-mask" @click="hideList" v-show="listShow" transition="fade"></div>
   </div>
@@ -129,10 +131,12 @@
           }
         },
         listShow() {
+          // 首先判断购物车内的东西不为空
           if (!this.totalCount) {
             this.fold = true;
             return false;
           }
+          // fold折叠的意思
           let show = !this.fold;
           if (show) {
             this.$nextTick(() => {
@@ -145,6 +149,7 @@
               }
             });
           }
+          console.log(show);
           return show;
         }
       },
@@ -335,10 +340,19 @@
       top: 0
       z-index: -1
       width: 100%
-      &.fold-transition
+      &.fold-enter
+        transition: all 0.5s
+        transform: translate3d(0, 0, 0)
+      &.fold-enter-active
         transition: all 0.5s
         transform: translate3d(0, -100%, 0)
-      &.fold-enter, &.fold-leave
+      &.fold-enter-to, &.fold-leave
+        transform: translate3d(0, -100%, 0)
+      &.fold-leave-active
+        transition: all 0.5s
+        transform: translate3d(0, 0, 0)
+      &.fold-leave-to
+        transition: all 0.5s
         transform: translate3d(0, 0, 0)
       .list-header
         height: 40px
